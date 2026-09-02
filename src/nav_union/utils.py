@@ -11,7 +11,12 @@ def default_image(python_version: str = "3.14") -> flyte.Image:
         registry=IMAGE_REGISTRY_BASE,
         name=IMAGE_NAME,
         extendable=True,
+        python_version=(int(python_version.split(".")[0]), int(python_version.split(".")[1]))
     ).with_env_vars({
         "UV_KEYRING_PROVIDER": "subprocess", 
         "UV_DEFAULT_INDEX": f"https://oauth2accesstoken@{PYPI_PROXY_INDEX_URL}"
     })
+
+
+if __name__ == "__main__":
+    print(default_image())
