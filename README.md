@@ -1,5 +1,21 @@
 # nav-union
-Package to simplify buildin union tasks
+Bibliotek for å forenkle oppsett av Union tasks og abstrahere bort Nav-spesifikk konfigurasjon for image config.
+
+## Eksempel på bruk
+```python
+import flyte
+from nav_union.utils import default_image
+
+image = default_image()
+image = image.with_uv_project(pyproject_file="pyproject.toml")
+image = image.with_env_vars({"test": "test"})
+
+env = flyte.TaskEnvironment(
+  name="my_env",
+  image=image,
+  ...
+)
+```
 
 ## Ny release
 
