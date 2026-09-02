@@ -1,0 +1,19 @@
+[project]
+name = "nav-union"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Espen Holtebu", email = "espen.holtebu@nav.no" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "flyte>=2.6.13",
+]
+
+[project.scripts]
+nav-union = "nav_union:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
