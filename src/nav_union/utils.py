@@ -1,4 +1,5 @@
 import flyte
+from pathlib import Path
 import importlib.metadata
 
 version = importlib.metadata.version("nav-union")
@@ -35,7 +36,7 @@ def quarto_render_image(source_folder: str, pyproject_file: str, python_version:
         "UV_KEYRING_PROVIDER": "subprocess", 
         "UV_DEFAULT_INDEX": f"https://oauth2accesstoken@{PYPI_PROXY_INDEX_URL}"
     }).with_source_folder(
-        src=source_folder,
+        src=Path(source_folder),
     ).with_workdir(
         workdir=source_folder,
     ).with_uv_project(
