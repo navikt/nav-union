@@ -18,7 +18,7 @@ def default_image(python_version: str = "3.14") -> flyte.Image:
     })
 
 
-def default_quarto_image(python_version: str = "3.14") -> flyte.Image:
+def quarto_render_image(source_folder: str, pyproject_file: str, python_version: str = "3.14") -> flyte.Image:
     return flyte.Image.from_base(
         image_uri=f"{IMAGE_REGISTRY_BASE}/{IMAGE_NAME}:{python_version}-quarto-base"
     ).clone(
@@ -29,7 +29,13 @@ def default_quarto_image(python_version: str = "3.14") -> flyte.Image:
     ).with_env_vars({
         "UV_KEYRING_PROVIDER": "subprocess", 
         "UV_DEFAULT_INDEX": f"https://oauth2accesstoken@{PYPI_PROXY_INDEX_URL}"
-    })
+    }).with_source_folder(
+        src=source_folder,
+    ).with_workdir(
+        workdir=source_folder,
+    ).with_uv_project(
+        pyproject_file=pyproject_file,
+    )
 
 
 if __name__ == "__main__":
