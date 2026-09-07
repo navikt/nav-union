@@ -1,4 +1,7 @@
 import flyte
+import importlib.metadata
+
+version = importlib.metadata.version("nav-union")
 
 IMAGE_REGISTRY_BASE = "europe-west1-docker.pkg.dev/nav-data-images-prod/nav-union-images"
 IMAGE_NAME = "flyte"
@@ -15,7 +18,9 @@ def default_image(python_version: str = "3.14") -> flyte.Image:
     ).with_env_vars({
         "UV_KEYRING_PROVIDER": "subprocess", 
         "UV_DEFAULT_INDEX": f"https://oauth2accesstoken@{PYPI_PROXY_INDEX_URL}"
-    })
+    }).with_pip_packages(
+        f"nav-union=={version}",
+    )
 
 
 def quarto_render_image(source_folder: str, pyproject_file: str, python_version: str = "3.14") -> flyte.Image:
@@ -35,6 +40,8 @@ def quarto_render_image(source_folder: str, pyproject_file: str, python_version:
         workdir=source_folder,
     ).with_uv_project(
         pyproject_file=pyproject_file,
+    ).with_pip_packages(
+        f"nav-union=={version}",
     )
 
 
