@@ -46,13 +46,13 @@ def quarto_render_image(source_folder: str, pyproject_file: str, python_version:
     )
 
 
-def find_pyproject(start_file: str | Path) -> Path:
+def find_pyproject(start_file: str) -> str:
     current = Path(start_file).resolve()
 
     for parent in [current.parent, *current.parents]:
         candidate = parent / "pyproject.toml"
         if candidate.exists():
-            return candidate
+            return str(candidate)
 
     raise FileNotFoundError(
         f"Could not find pyproject.toml above {start_file}"
@@ -60,11 +60,13 @@ def find_pyproject(start_file: str | Path) -> Path:
 
 
 def uv_image(
+    pyproject_file: str | None,
     group_name: str,
-    pyproject: Path,
 ) -> flyte.Image:
+    if not pyproject_file:
+        pyproject_file = find_pyproject(__file__) 
     return default_image().with_uv_project(
-        pyproject_file=pyproject,
+        pyproject_file=pyproject_file,
         extra_args=f"--only-group {group_name}",
     )
 
