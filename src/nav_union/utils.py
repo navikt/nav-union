@@ -92,5 +92,15 @@ def uv_image(
     )
 
 
+def oracle_dsn(
+        user: str,
+        password: str,
+        host: str,
+        service_name: str,
+        port: int = 1521, 
+    ) -> str:
+    return f"{user}/{password}@{host}:{port}/{service_name}"
+
+
 if __name__ == "__main__":
     print(default_image())
