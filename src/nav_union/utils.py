@@ -39,7 +39,7 @@ def quarto_render_image(source_folder: str, pyproject_file: str, python_version:
     }).with_source_folder(
         src=Path(source_folder),
     ).with_workdir(
-        workdir=source_folder,
+        workdir=source_folder.split("/")[-1],
     ).with_uv_project(
         pyproject_file=pyproject_file,
     ).with_pip_packages(
