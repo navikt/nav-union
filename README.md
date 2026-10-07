@@ -5,6 +5,7 @@ Bibliotek for å forenkle oppsett av Union tasks og abstrahere bort Nav-spesifik
 ```python
 import flyte
 from nav_union.utils import default_image
+from nav_union.slack import flyte_task
 
 image = default_image()
 image = image.with_uv_project(pyproject_file="pyproject.toml")
@@ -15,6 +16,11 @@ env = flyte.TaskEnvironment(
   image=image,
   ...
 )
+
+@flyte_task(task_environment=env, channel_name="#kom-i-gang-med-union", notify_on_failure=True)
+def my_task():
+    print("Hello World!")
+
 ```
 
 ## Ny release
