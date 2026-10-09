@@ -17,7 +17,7 @@ env = flyte.TaskEnvironment(
   ...
 )
 
-@flyte_task(task_environment=env, channel_name="#kom-i-gang-med-union", notify_on_failure=True)
+@flyte_task(task_environment=env, channel_name="kom-i-gang-med-union", notify_on_failure=True)
 def my_task():
     print("Hello World!")
 
