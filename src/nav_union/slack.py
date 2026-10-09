@@ -25,7 +25,7 @@ def flyte_task(task_environment: TaskEnvironment, channel_name: str, notify_on_f
             except Exception as error:
                 if notify_on_failure:
                     task_name = task.__name__
-                    slack_message = f"❌  Feil i {task_name}! Sjekk logger i Union ❌"
+                    slack_message = f"❌ Feil i {task_name}! Sjekk logger i Union ❌"
                     send_slack_message(channel_name=channel_name, message=slack_message)
 
                 raise Exception(error)
