@@ -23,6 +23,18 @@ def my_task():
 
 ```
 
+## Tester
+
+Kjør testene lokalt med:
+
+```bash
+uv sync --locked
+uv run --locked pytest
+```
+
+Testene krever ikke Slack-token, Union-tilgang eller bygging av container-images.
+GitHub Actions kjører dem på Python 3.12 og 3.14 ved push og pull requests.
+
 ## Ny release
 
 Lag og push en ny versjonstag på formen `0.2.0`:
