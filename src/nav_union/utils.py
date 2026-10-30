@@ -1,6 +1,7 @@
 import flyte
 from pathlib import Path
 import importlib.metadata
+import shlex
 
 version = importlib.metadata.version("nav-union")
 
@@ -46,9 +47,10 @@ def quarto_render_image(source_folder: str, pyproject_file: str, python_version:
         f"nav-union=={version}",
     )
 
+
 def r_image(source_folder: str, requirements_file: str="packages.R", python_version: str = "3.14") -> flyte.Image:
     return flyte.Image.from_base(
-        image_uri=f"{IMAGE_REGISTRY_BASE}/{IMAGE_NAME}:{python_version}-r-base"
+        image_uri=f"{IMAGE_REGISTRY_BASE}/{IMAGE_NAME}:{python_version}-r-base-v2"
     ).clone(
         registry=IMAGE_REGISTRY_BASE,
         name=IMAGE_NAME,
@@ -62,7 +64,13 @@ def r_image(source_folder: str, requirements_file: str="packages.R", python_vers
     ).with_workdir(
         workdir=source_folder,
     ).with_commands(
-        commands=[f"Rscript {requirements_file}"],
+        commands=[
+            "R --version",
+            f"R_PROFILE_USER=/etc/R/cran.profile.R Rscript {shlex.quote(requirements_file)}",
+        ],
+        secret_mounts=[
+            flyte.Secret(key="ak-cran-netrc", mount="/etc/flyte/secrets"),
+        ],
     ).with_pip_packages(
         f"nav-union=={version}",
     )
