@@ -46,14 +46,11 @@ def test_image_defaults_and_python_version(factory, suffix, python_version, tmp_
     assert image.name == "flyte"
     assert image.extendable is True
     assert image.python_version == tuple(map(int, expected_version.split(".")))
-    assert dict(layer(image, "Env").env_vars) == {
-        "UV_KEYRING_PROVIDER": "subprocess",
-        "UV_DEFAULT_INDEX": (
-            "https://oauth2accesstoken@"
-            "europe-west1-python.pkg.dev/nav-data-images-prod/pypi/simple/"
-        ),
-    }
-    assert layer(image, "PipPackages").packages == (f"nav-union=={version('nav-union')}",)
+    packages = layer(image, "PipPackages")
+    assert packages.packages == (f"nav-union=={version('nav-union')}",)
+    assert packages.secret_mounts == (
+        flyte.Secret(key="ak-pypi-index", as_env_var="UV_DEFAULT_INDEX"),
+    )
 
 
 def test_quarto_image_copies_source_and_installs_project(tmp_path):
@@ -67,6 +64,7 @@ def test_quarto_image_copies_source_and_installs_project(tmp_path):
     assert layer(image, "CopyConfig").src == source
     assert layer(image, "WorkDir").workdir == "reports"
     assert layer(image, "UVProject").pyproject == pyproject
+    assert layer(image, "UVProject").secret_mounts == (utils.PYPI_INDEX_SECRET,)
 
 
 @pytest.mark.parametrize(
@@ -135,6 +133,7 @@ def test_uv_image_uses_explicit_project_and_dependency_group(tmp_path, monkeypat
     project = layer(image, "UVProject")
     assert project.pyproject == pyproject
     assert project.extra_args == "--only-group reports"
+    assert project.secret_mounts == (utils.PYPI_INDEX_SECRET,)
 
 
 def test_uv_image_discovers_project_when_omitted(tmp_path, monkeypatch):
@@ -147,3 +146,4 @@ def test_uv_image_discovers_project_when_omitted(tmp_path, monkeypatch):
     find.assert_called_once_with(utils.__file__)
     assert layer(image, "UVProject").pyproject == pyproject
     assert layer(image, "UVProject").extra_args == "--only-group reports"
+    assert layer(image, "UVProject").secret_mounts == (utils.PYPI_INDEX_SECRET,)
