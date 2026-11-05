@@ -4,11 +4,14 @@ Bibliotek for å forenkle oppsett av Union tasks og abstrahere bort Nav-spesifik
 ## Eksempel på bruk
 ```python
 import flyte
-from nav_union.utils import default_image
+from nav_union.utils import PYPI_INDEX_SECRET, default_image
 from nav_union.slack import flyte_task
 
 image = default_image()
-image = image.with_uv_project(pyproject_file="pyproject.toml")
+image = image.with_uv_project(
+    pyproject_file="pyproject.toml",
+    secret_mounts=PYPI_INDEX_SECRET,
+)
 image = image.with_env_vars({"test": "test"})
 
 env = flyte.TaskEnvironment(
