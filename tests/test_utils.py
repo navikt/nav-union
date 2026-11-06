@@ -8,7 +8,8 @@ import pytest
 from nav_union import utils
 
 
-REGISTRY = "europe-west1-docker.pkg.dev/nav-data-images-prod/nav-union-images"
+BASE_REGISTRY = "artifacts.data.nav.no/ghcr/navikt/union-images"
+TARGET_REGISTRY = "artifacts.data.nav.no/nav-union-images"
 
 
 def layer(image, name):
@@ -41,8 +42,8 @@ def test_image_defaults_and_python_version(factory, suffix, python_version, tmp_
 
     expected_version = python_version or "3.14"
     assert isinstance(image, flyte.Image)
-    assert image.base_image == f"{REGISTRY}/flyte:{expected_version}-{suffix}"
-    assert image.registry == REGISTRY
+    assert image.base_image == f"{BASE_REGISTRY}/flyte:{expected_version}-{suffix}"
+    assert image.registry == TARGET_REGISTRY
     assert image.name == "flyte"
     assert image.extendable is True
     assert image.python_version == tuple(map(int, expected_version.split(".")))
