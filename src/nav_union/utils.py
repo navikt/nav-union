@@ -6,7 +6,7 @@ import shlex
 version = importlib.metadata.version("nav-union")
 
 IMAGE_REGISTRY_BASE = (
-    "europe-west1-docker.pkg.dev/nav-data-images-prod/nav-union-images"
+    "artifacts.data.nav.no/nav-union-images"
 )
 IMAGE_NAME = "flyte"
 PYPI_INDEX_SECRET = flyte.Secret(
