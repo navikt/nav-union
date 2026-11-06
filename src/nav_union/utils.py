@@ -5,9 +5,8 @@ import shlex
 
 version = importlib.metadata.version("nav-union")
 
-IMAGE_REGISTRY_BASE = (
-    "artifacts.data.nav.no/nav-union-images"
-)
+IMAGE_REGISTRY_BASE = "artifacts.data.nav.no/ghcr/navikt/union-images"
+IMAGE_REGISTRY_TARGET = "artifacts.data.nav.no/nav-union-images"
 IMAGE_NAME = "flyte"
 PYPI_INDEX_SECRET = flyte.Secret(
     key="ak-pypi-index",
@@ -21,7 +20,7 @@ def default_image(python_version: str = "3.14") -> flyte.Image:
             image_uri=f"{IMAGE_REGISTRY_BASE}/{IMAGE_NAME}:{python_version}-base"
         )
         .clone(
-            registry=IMAGE_REGISTRY_BASE,
+            registry=IMAGE_REGISTRY_TARGET,
             name=IMAGE_NAME,
             extendable=True,
             python_version=(
@@ -44,7 +43,7 @@ def quarto_render_image(
             image_uri=f"{IMAGE_REGISTRY_BASE}/{IMAGE_NAME}:{python_version}-quarto-base"
         )
         .clone(
-            registry=IMAGE_REGISTRY_BASE,
+            registry=IMAGE_REGISTRY_TARGET,
             name=IMAGE_NAME,
             extendable=True,
             python_version=(
@@ -79,7 +78,7 @@ def r_image(
             image_uri=f"{IMAGE_REGISTRY_BASE}/{IMAGE_NAME}:{python_version}-r-base-v2"
         )
         .clone(
-            registry=IMAGE_REGISTRY_BASE,
+            registry=IMAGE_REGISTRY_TARGET,
             name=IMAGE_NAME,
             extendable=True,
             python_version=(
